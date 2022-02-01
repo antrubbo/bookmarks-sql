@@ -9,6 +9,7 @@ const app = express();
 // MIDDLEWARE
 app.use(cors());
 app.use(express.json());
+require("dotenv").config();
 app.use("/bookmarks", bookmarksController);
 
 // ROUTES
