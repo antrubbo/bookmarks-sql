@@ -1,9 +1,15 @@
 const express = require("express");
 const bookmarks = express.Router();
-const { getAllBookmarks } = require("../queries/bookmarks")
-const { getBookmark } = require("../queries/bookmarks")
-const { createBookmark } = require("../queries/bookmarks")
-const { checkName } = require("../validations/checkBookmarks.js");
+const { 
+  getAllBookmarks,
+  getBookmark,
+  createBookmark,
+  deleteBookmark,
+  updateBookmark
+} = require("../queries/bookmarks")
+const { 
+  checkName, checkBoolean
+ } = require("../validations/checkBookmarks.js");
 
 // INDEX
 bookmarks.get("/", async (req, res) => {
@@ -19,7 +25,6 @@ bookmarks.get("/:id", async (req, res) => {
   const { id } = req.params
   try{
     const oneBookmark = await getBookmark(id)
-    // console.log(oneBookmark)
     if(oneBookmark.id){
       res.status(200).json(oneBookmark)
     } else {
@@ -41,6 +46,26 @@ bookmarks.post("/", checkName, async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: "Bookmark creation error!" });
+  }
+})
+
+bookmarks.delete("/:id", async (req, res) => {
+  const { id } = req.params
+  const deletedBookmark = await deleteBookmark(id)
+  if (deletedBookmark.id){
+    res.status(200).json(deletedBookmark)
+  } else {
+    res.status(500).json("Bookmark not found!")
+  }
+})
+
+bookmarks.put("/:id", checkName, checkBoolean, (req, res) => {
+  const { id } = req.params
+  const updatedBookmark = await updateBookmark(id, req.body)
+  if(updatedBookmark.id){
+    res.status(200).json(updatedBookmark)
+  } else {
+    res.status(500).json("Error updating bookmark!")
   }
 })
 
