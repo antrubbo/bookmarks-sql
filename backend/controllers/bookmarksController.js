@@ -8,8 +8,9 @@ const {
   updateBookmark
 } = require("../queries/bookmarks")
 const { 
-  checkName, checkBoolean
- } = require("../validations/checkBookmarks.js");
+  checkName, 
+  checkBoolean
+} = require("../validations/checkBookmarks.js");
 
 // INDEX
 bookmarks.get("/", async (req, res) => {
@@ -59,14 +60,10 @@ bookmarks.delete("/:id", async (req, res) => {
   }
 })
 
-bookmarks.put("/:id", checkName, checkBoolean, (req, res) => {
+bookmarks.put("/:id", checkName, checkBoolean, async (req, res) => {
   const { id } = req.params
   const updatedBookmark = await updateBookmark(id, req.body)
-  if(updatedBookmark.id){
-    res.status(200).json(updatedBookmark)
-  } else {
-    res.status(500).json("Error updating bookmark!")
-  }
+  res.status(200).json(updatedBookmark)
 })
 
 module.exports = bookmarks;

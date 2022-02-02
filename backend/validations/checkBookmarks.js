@@ -8,7 +8,7 @@ const checkName = (req, res, next) => {
 };
 
 const checkBoolean = (req, res, next) => {
-    if (req.body.is_favorite) {
+    if (typeof req.body.is_favorite === "boolean") {
         console.log("bool is ok");
         next()
     } else {
