@@ -24,15 +24,11 @@ bookmarks.get("/", async (req, res) => {
 
 bookmarks.get("/:id", async (req, res) => {
   const { id } = req.params
-  try{
-    const oneBookmark = await getBookmark(id)
-    if(oneBookmark.id){
-      res.status(200).json(oneBookmark)
-    } else {
-      res.status(500).json({ error: "not found" })
-    }
-  } catch (error) {
-    console.log(error)
+  const oneBookmark = await getBookmark(id)
+  if(oneBookmark){
+    res.status(200).json(oneBookmark)
+  } else {
+    res.status(500).json({ error: "not found" })
   }
 })
 
